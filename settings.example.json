@@ -1,0 +1,31 @@
+{
+  "_comment": "À FUSIONNER dans .claude/settings.json du projet (ne pas remplacer). Défense en profondeur : l'enforcement dur est dans hooks/read-guard.sh. Ajuste les globs à ton matcher.",
+  "permissions": {
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/secrets/**)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Write(**/.env)",
+      "Write(**/secrets/**)",
+      "Write(**/appsettings.Production.json)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)"
+    ],
+    "ask": [
+      "Write(**/appsettings*.json)",
+      "Bash(docker push:*)",
+      "Bash(dotnet ef database update:*)"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4317",
+    "FORGE_TEST_CMD": "",
+    "FORGE_VAULT": "~/forge-brain"
+  }
+}
