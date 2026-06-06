@@ -31,4 +31,8 @@ Stack opinionnée appliquée sauf déviation justifiée par un ADR. Adapter aux 
 ## Front (si applicable)
 - Composants typés, état maîtrisé, pas de re-render inutile ; le front passe les mêmes gates qualité que le back.
 
+## Savoir-faire C# par couche
+Pour le détail des conventions par couche (déclenché just-in-time selon le fichier édité), voir les skills dédiés :
+`csharp-api-layer`, `csharp-application-layer`, `csharp-mapping-layer`, `csharp-persistence-layer`, `csharp-domain-layer`, `csharp-testing-layer`, `csharp-contracts-integration`.
+
 > Toute déviation à ces défauts doit être tracée en ADR (`.forge/design/ADR-00x.md`).

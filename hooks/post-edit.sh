@@ -24,7 +24,19 @@ case "$path" in
   *.rs)                  command -v rustfmt >/dev/null 2>&1 && rustfmt "$path" >/dev/null 2>&1 || true ;;
 esac
 
-# 2) Tests de non-régression (bloquant si configuré)
+# 2) Gate build (bloquant si configurée) — standard « 0 erreur / 0 warning ».
+# Ex. FORGE_BUILD_CMD="dotnet build -warnaserror". Lancée avant les tests : un
+# build rouge rend les tests inutiles.
+if [ -n "${FORGE_BUILD_CMD:-}" ]; then
+  blog="$(mktemp)"
+  if ! eval "$FORGE_BUILD_CMD" >"$blog" 2>&1; then
+    echo "Forge post-edit : BUILD en ÉCHEC après modification de $path (warnings traités en erreurs ?). Corrige avant de continuer." >&2
+    tail -n 30 "$blog" >&2
+    exit 2
+  fi
+fi
+
+# 3) Tests de non-régression (bloquant si configuré)
 if [ -n "${FORGE_TEST_CMD:-}" ]; then
   log="$(mktemp)"
   if ! eval "$FORGE_TEST_CMD" >"$log" 2>&1; then

@@ -1,4 +1,4 @@
-# Forge — Agentic Software Factory (plugin Claude Code) · v0.1.0
+# Forge — Agentic Software Factory (plugin Claude Code) · v0.2.0
 
 Chaîne **idée → spec → design → code testé → revue → déploiement**, avec standards d'ingénierie **imposés par règles déterministes** (hooks + permissions) et une **mémoire de fabrique** durable (vault Obsidian, pattern LLM Wiki).
 
@@ -11,7 +11,8 @@ forge/
 ├── agents/        # product-analyst, solution-architect, implementer, qa-reviewer,
 │                  # security-auditor, sre-deployer
 ├── skills/        # engineering-standards, spec-conventions, stack-defaults,
-│                  # context-architecture, obsidian-vault
+│                  # context-architecture, obsidian-vault,
+│                  # csharp-{api,application,mapping,persistence,domain,testing,contracts-integration}-layer
 ├── hooks/         # hooks.json + _lib.sh + read-guard, pre-deploy-gate, post-edit,
 │                  # decision-logger, vault-compile, skill-trace, post-project
 ├── settings.example.json   # permissions + télémétrie + FORGE_VAULT à fusionner
@@ -54,11 +55,15 @@ Principe : une description de skill est une *suggestion* (déclenchement sémant
 1. `chmod +x hooks/*.sh`
 2. Charger le plugin : `/plugin` dans Claude Code, ou pointer le SDK sur le dossier racine `forge/`.
 3. Fusionner `settings.example.json` dans `.claude/settings.json` du projet.
-4. Variables utiles : `FORGE_TEST_CMD` (active les tests bloquants, ex. `dotnet test`), `FORGE_VAULT` (chemin du vault, défaut `~/forge-brain`).
+4. Variables utiles : `FORGE_TEST_CMD` (tests bloquants, ex. `dotnet test`), `FORGE_BUILD_CMD` (gate build bloquante, ex. `dotnet build -warnaserror`), `FORGE_VAULT` (chemin du vault, défaut `~/forge-brain`).
 
 ### Dépendances runtime
+- **bash requis** : les hooks sont en bash. Sous **Windows**, installer **Git for Windows** (git-bash) — `hooks.json` appelle `bash …`. Vérifier l'installation avec `scripts/smoke-test.ps1` (lanceur PowerShell qui délègue au smoke-test bash).
 - Recommandé : `jq`. **Non obligatoire** : les hooks retombent sur `python3` puis `sed`.
 - Optionnel selon la stack : `dotnet format`, `prettier`, `ruff`, `gofmt`, `rustfmt`.
+
+### Smoke-test
+- `bash scripts/smoke-test.sh` (ou `scripts/smoke-test.ps1` sous Windows) : valide structure, frontmatter des skills, cohérence `hooks.json` ↔ scripts, et le comportement bloquant des gardes (`read-guard`, `pre-deploy-gate`).
 
 ## Observabilité (skills + tokens)
 `skill-trace` donne le *quel skill / quand*. Pour le *coût en tokens par prompt*, activer la télémétrie OTEL (variables dans `settings.example.json`) et corréler via l'attribut `prompt.id` côté backend (Datadog/Grafana). L'attribution token exacte par skill n'est pas native ; granularité réaliste = *par prompt*. Voir `/forge:status --trace`.
