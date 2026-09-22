@@ -26,6 +26,9 @@
     "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
     "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4317",
     "FORGE_TEST_CMD": "",
+    "_FORGE_TEST_CMD_hint": "Défaut .NET : \"dotnet test\" (active la gate tests bloquante post-edit).",
+    "FORGE_BUILD_CMD": "",
+    "_FORGE_BUILD_CMD_hint": "Défaut .NET : \"dotnet build -warnaserror\" (gate build bloquante, standard 0 erreur / 0 warning).",
     "FORGE_VAULT": "~/forge-brain"
   }
 }

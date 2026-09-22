@@ -1,0 +1,25 @@
+{
+  "_comment": "Template de connecteurs MCP Forge. Copier en .mcp.json à la racine du PROJET (pas du plugin) et renseigner les variables d'env. Les serveurs dépendent de ton infra ; adapte ou retire ce qui ne s'applique pas. Aucun secret en clair : utiliser des variables d'environnement.",
+
+  "mcpServers": {
+    "gitlab": {
+      "_comment": "CI/CD + Merge Requests. Sert /forge:deploy et /forge:review. Voir https://gitlab.com/.../gitlab-mcp ou l'implémentation MCP GitLab de ton choix.",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-gitlab"],
+      "env": {
+        "GITLAB_PERSONAL_ACCESS_TOKEN": "${GITLAB_TOKEN}",
+        "GITLAB_API_URL": "${GITLAB_API_URL}"
+      }
+    },
+
+    "grafana": {
+      "_comment": "Observabilité : dashboards + corrélation tokens par prompt.id (cf. /forge:status --trace). Alternative : serveur MCP Datadog.",
+      "command": "npx",
+      "args": ["-y", "mcp-grafana"],
+      "env": {
+        "GRAFANA_URL": "${GRAFANA_URL}",
+        "GRAFANA_API_KEY": "${GRAFANA_API_KEY}"
+      }
+    }
+  }
+}

@@ -24,3 +24,5 @@ Si `$ARGUMENTS` contient `--trace` : produis le tableau **observabilité** en jo
 - la télémétrie OTEL (`claude_code.token.usage`) corrélée par `prompt.id` côté backend (Datadog/Grafana).
 
 Tableau attendu : `prompt → skills déclenchés → tokens in/out/cache → coût`. Si la télémétrie OTEL n'est pas activée, indique-le et affiche au moins le récap des skills depuis le JSONL.
+
+**Corrélation tokens (coût réel).** L'attribution token par skill n'est pas native ; granularité réaliste = **par prompt**. Si un connecteur MCP `grafana`/`datadog` est exposé (voir `.mcp.json.example`), interroge `claude_code.token.usage` corrélé par l'attribut `prompt.id` pour remplir les colonnes tokens/coût. Sinon, laisse-les vides et signale que seul le déclenchement (`skills.jsonl`) est disponible localement.

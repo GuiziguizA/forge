@@ -1,6 +1,6 @@
 {
   "name": "forge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Agentic Software Factory : chaîne idée → spec → code testé → revue tracée, avec standards d'ingénierie imposés par règles déterministes.",
   "author": {
     "name": "Guillaume"

@@ -17,10 +17,20 @@ case "$path" in
   *) exit 0 ;;
 esac
 
-# 1) Avertir si note sans frontmatter (non bloquant)
+# 1) Valider le frontmatter (non bloquant) : fence d'ouverture + clés requises.
 case "$path" in
-  *.md) head -n1 "$path" 2>/dev/null | grep -q '^---' || \
-        echo "Forge vault-compile : note sans frontmatter -> $path (ajoute tags/status/created)." >&2 ;;
+  *.md)
+    if head -n1 "$path" 2>/dev/null | grep -q '^---'; then
+      # Bloc frontmatter = lignes entre la 1re et la 2e fence '---'.
+      fm="$(awk 'NR>1 && /^---[[:space:]]*$/{exit} NR>1{print}' "$path" 2>/dev/null)"
+      missing=""
+      for k in tags status created; do
+        printf '%s\n' "$fm" | grep -qE "^${k}:" || missing="$missing $k"
+      done
+      [ -n "$missing" ] && echo "Forge vault-compile : frontmatter incomplet ->$missing manquant(s) dans $path." >&2
+    else
+      echo "Forge vault-compile : note sans frontmatter -> $path (ajoute tags/status/created)." >&2
+    fi ;;
 esac
 
 # 2) Index machine régénéré (best-effort)
